@@ -61,6 +61,7 @@ $ dispRsltExtnPerf
 ```
 and then the graph is shown.
 Below is the graphs obtained for datasets 1 and 2.
+![Results for dataset 1]("Results for dataset 1")
 
 ## Experiments in Sections VI(c)
 

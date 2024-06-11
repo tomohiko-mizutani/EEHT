@@ -97,7 +97,7 @@ Section VI-C of the paper showed the experimental results on hyperspectral unmix
 The below is the RGB image of Urban.
 
 <p align="center">
-<img src="./Result/urban.png" width="25%">
+<img src="./Result/urban.png" width="40%">
 </p>
 
 You can run EEHT-C for unmixing Urban by using ``expUnmixUrban.m`` and ``dispRsltUnmixUrban.m``.
@@ -145,7 +145,7 @@ The ``Result`` directory contains five output files
 Below is the abundance maps generated from ``rsltUnmixing_preproc1.mat``.
 
 <p align="center">
-<img src="./Result/rsltUnmixUrban_preproc1.png" width="100%">
+<img src="./Result/rsltUnmixUrban_preproc1.png" width="80%">
 </p>
 
 ---

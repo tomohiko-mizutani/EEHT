@@ -20,7 +20,7 @@ function [] = dispRsltUnmixUrban(preprocOpt)
 
     for i = 1:r
 
-        subplot(1, r, i);
+        subplot(2, r/2, i);
         image(abdMap(:, :, i), 'CDataMapping', 'scaled');
         axis off;
     end

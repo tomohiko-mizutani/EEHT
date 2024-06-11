@@ -4,15 +4,21 @@ This is a MATLAB code for the algoithm EEHT, presented in the paper "Tomohiko Mi
 
 ## Prerequisites
 
-You need to install CPLEX and enter the path of the installation directory to the file ``setPara.m``.
+You need to install CPLEX and enter the path of the install directory to the file ``setPara.m``.
+For example, if CPLEX is installed in the directory ``/opt/ibm/ILOG/CPLEX_Studio1210/``, then edit the file as follows.
+
+```matlab
+cplexPath = '/opt/ibm/ILOG/CPLEX_Studio1210/cplex/matlab/x86-64_linux';
+```
+
 In addition, optimization toolbox is needed when reproducing the experiments in Sections VI-B and -C by using ``expExtnPerf.m`` and ``expUnmixUrban.m``.
 
 ## Quick Start
 
 To run EEHT for a noisy separable matrix  $A = W H + N$ of size $d \times n$ with factorization rank $r$, type the command in the MATLAB command prompt.
 
-```text
->> run_eeht
+```matlab
+run_eeht
 ```
 
 ### Input
@@ -41,7 +47,7 @@ The default values are $(\lambda, \mu) = (3, 15)$.
 The following is the example of setting $(\lambda, \mu) = (5, 50)$.
  Open ``setPara.m`` and edit it as
 
-```text
+```matlab
 lambda = 5;  
 mu = 50;
 ```
@@ -49,6 +55,7 @@ mu = 50;
 Note that the parameters $\lambda, \mu$ should be chosen to satisfy $\lambda r + \mu \le n$ for the number $n$ of columns of $A$ and the factorization rank $r$.
 
 ## Experiments in Sections VI-B - Endmember Extraction Performance
+
 Section VI-B of the paper showed the experimental results on the endmember extraction performance of EEHT.
 The experiments for datasets 1 and 2 can be reproduced by using ``expExtnPerf.m`` and ``dispRsltExtnPerf.m``.
 The former one is for conducing experiments and the latter one is for plotting a graph for the results.
@@ -63,23 +70,23 @@ The following is the example for applying EEHT for dataset 1.
 In the experiments, you are recommend to set $(\lambda, \mu) = (10,100)$.
 To do so, edit  ``setPara.m`` as follows.
 
-```text
+```matlab
 lambda = 10;  
 mu = 100;
 ```
 
 Then, type the command for starting the experiments.
 
-```text
->> expExtnPerf(1)
+```matlab
+expExtnPerf(1)
 ```
 
 After the code has finished running, you get the output file ``rsltExtnPerf_dataset1.mat``.
 You can display a graph for the results by using  ``dispRsltExtnPerf.m``.
 Type the command
 
-```text
->> dispRsltExtnPerf(1)
+```matlab
+dispRsltExtnPerf(1)
 ```
 
 and then a graph is displayed.
@@ -94,7 +101,7 @@ The ``Result`` directory contains the output files ``rsltExtnPerf_dataset1.mat``
 ## Experiments in Sections VI-C - Hyperspectral Unmixing of Urban HSI
 
 Section VI-C of the paper showed the experimental results on hyperspectral unmixing of the Urban HSI.
-The below is the RGB image of Urban.
+Below is the RGB image of Urban.
 
 <p align="center">
 <img src="./Result/urban.png" width="40%">
@@ -120,23 +127,23 @@ The following is the example for applying EEHT-C for Urban with $(\phi, \omega)=
 You are recommend to set $(\lambda, \mu) = (50,300)$.
 To do so, edit  ``setPara.m`` as follows.
 
-```text
+```matlab
 lambda = 50;  
 mu = 300;
 ```
 
 Then, type the command for applying EEHT-C with preprocessing with $(\phi, \omega)=(0.4, 0.1)$ for Urban.
 
-```text
->> expUnmixUrban(1)
+```matlab
+expUnmixUrban(1)
 ```
 
 After the code has finished running, you get the output file ``rsltUnmixing_preproc1.mat``.
 You can display the abundance maps of Urban obtained by EEHT-C by using  ``dispRsltUnmixUrban.m``.
 Type the command
 
-```text
->> dispRsltUnmixUrban(1)
+```matlab
+dispRsltUnmixUrban(1)
 ```
 
 and then abundance maps are shown.

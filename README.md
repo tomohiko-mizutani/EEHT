@@ -145,7 +145,7 @@ The ``Result`` directory contains five output files
 Below is the abundance maps generated from ``rsltUnmixing_preproc1.mat``.
 
 <p align="center">
-<img src="./Result/rsltUnmixUrban_preproc1.png" width="80%">
+<img src="./Result/rsltUnmixUrban_preproc1.png" width="70%">
 </p>
 
 ---

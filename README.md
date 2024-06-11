@@ -4,7 +4,7 @@ This is a MATLAB code for the algoithm EEHT, presented in the paper "Tomohiko Mi
 
 ## Prerequisites
 
-You need to install CPLEX and enter the path of the install directory to the file ``setPara.m``.
+You need to install CPLEX and enter the path of the directory containing ``cplexlp.m`` to the file ``setPara.m``.
 For example, if CPLEX is installed in the directory ``/opt/ibm/ILOG/CPLEX_Studio1210/``, then edit the file as follows.
 
 ```matlab

@@ -86,9 +86,9 @@ and then a graph is displayed.
 The ``Result`` directory contains the output files ``rsltExtnPerf_dataset1.mat`` and ``rsltExtnPerf_dataset2.mat``. Below is the graphs generated from them.
 
 <section style="text-align: center;">
-<img src="./Result/rsltExtnPerf_dataset1.png" width="40%">
-&nbsp;　&nbsp;
-<img src="./Result/rsltExtnPerf_dataset2.png" width="40%">
+<img src="./Result/rsltExtnPerf_dataset1.png" width="30%">
+&nbsp;　&nbsp; &nbsp; &nbsp; &nbsp;
+<img src="./Result/rsltExtnPerf_dataset2.png" width="30%">
 </section>
 
 ## Experiments in Sections VI-C - Hyperspectral Unmixing of Urban HSI
@@ -97,7 +97,7 @@ Section VI-C of the paper showed the experimental results on hyperspectral unmix
 The below is the RGB image of Urban.
 
 <section style="text-align: center;">
-<img src="./Result/urban.png" width="25%">
+<img src="./Result/urban.png" width="20%">
 </section>
 
 You can run EEHT-C for unmixing Urban by using ``expUnmixUrban.m`` and ``dispRsltUnmixUrban.m``.

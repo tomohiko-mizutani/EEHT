@@ -54,12 +54,10 @@ The experiments for datasets 1 and 2 can be reproduced by using ``expExtnPerf.m`
 The former one is for conducing experiments and the latter one is for plotting a graph for the results.
 To run the codes, you need to set up the input argument ``datasetOpt`` according to the table below.
 
-<p align="center">
 |``datasetOpt`` | Dataset for which you apply EEHT |
 | --- | --- |
 | 1 | Dataset 1|
 | 2 | Dataset 2|
-</p>
 
 The following is the example for applying EEHT for dataset 1.
 In the experiments, you are recommend to set $(\lambda, \mu) = (10,100)$.

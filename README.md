@@ -99,8 +99,7 @@ The Result directory contains the output files `rsltExtnPerf_dataset1.mat` and `
 
 ## Experiments in Sections VI-C - Hyperspectral Unmixing of Urban HSI
 
-Section VI-C of the paper showed the experimental results on hyperspectral unmixing of the Urban HSI.
-Below is the RGB image of Urban.
+Section VI-C of the paper studied the unmixing of Urban HSI with assuming that there are six endmembers in the image: Asphalt, Grass, Tree, Roof 1, Roof 2 and Soil. Below is the RGB image of Urban.
 
 <p align="center">
 <img src="./Result/urban.png" width="40%">
@@ -151,7 +150,7 @@ The Result directory contains the output files
 Below is the abundance maps generated from ``rsltUnmixing_preproc1.mat``.
 
 <p align="center">
-<img src="./Result/rsltUnmixUrban_preproc1.png" width="80%">
+<img src="./Result/rsltUnmixUrban_preproc1.png" width="70%">
 </p>
 
 ---

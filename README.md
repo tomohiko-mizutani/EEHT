@@ -1,6 +1,6 @@
 # EEHT - Efficient and Effective Implementation of Hottopixx Methods
 
-This is a MATLAB code for the algoithm EEHT, presented in the paper "Tomohiko Mizutani, Implementing Hottopixx Methods for Endmember Extraction in Hyperspectral Images, arXiv, 2024".
+This is MATLAB code for the algoithm EEHT, presented in the paper "Tomohiko Mizutani, Implementing Hottopixx Methods for Endmember Extraction in Hyperspectral Images, arXiv, 2024".
 
 ## Requirements
 
@@ -58,7 +58,7 @@ Section VI-B of the paper showed the experimental results on the endmember extra
 The experiments for datasets 1 and 2 can be reproduced by using `expExtnPerf.m` and `dispRsltExtnPerf.m`
 where dataset 1 is constructed from Jasper Ridge HSI and dataset 2 from Samson HSI.
 The former code is for conducing experiments and the latter one is for plotting a graph for the results.
-To run the codes, you need to set the input argument `datasetOpt` according to the table below.
+To run the code, you need to set the input argument `datasetOpt` according to the table below.
 
 | `datasetOpt` | Dataset for which you apply EEHT |
 | --- | --- |

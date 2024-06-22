@@ -11,8 +11,6 @@ For example, if CPLEX is installed in the directory Applications on macOS, then 
 cplexPath = '/Applications/CPLEX_Studio1210/cplex/matlab/x86-64_osx';
 ```
 
-In addition, optimization toolbox is needed when reproducing the experiments in Sections VI-B and -C by using `expExtnPerf.m` and `expUnmixUrban.m`.
-
 ## Quick Start
 
 To run EEHT for a noisy separable matrix  $A = W H + N$ of size $d \times n$ with factorization rank $r$, type the command in the MATLAB command prompt.
@@ -110,7 +108,7 @@ The former one is for unmixing Urban and the latter one is for plotting abundanc
 To enhance the unmixing performance,
 you are recommended to use a preprocessing technique with parameters $\phi$ and $\omega$ that is
 described in Section VI-C.
-To run `expUnmixUrban.m` and `dispRsltUnmixUrban.m`, 
+To run `expUnmixUrban.m` and `dispRsltUnmixUrban.m`,
 it is necessary to set the input argument `preprocOpt` according to the table below.
 
 | `preprocOpt` | Parameters $\phi, \lambda$ |

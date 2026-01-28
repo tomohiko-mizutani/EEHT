@@ -1,155 +1,219 @@
-# EEHT - Efficient and Effective Implementation of Hottopixx Methods
+# EEHT: Efficient and Effective Implementation of Hottopixx Methods
 
-This is MATLAB code for the algoithm EEHT, presented in the paper "Tomohiko Mizutani, Implementing Hottopixx Methods for Endmember Extraction in Hyperspectral Images, arXiv, 2024".
+This repository contains MATLAB code for the EEHT methods, introduced in the following paper:
+
+*Endmember Extraction From Hyperspectral Images Using Self-Dictionary Approach With Linear Programming*, TSP, 2025.
+ [https://doi.org/10.1109/TSP.2025.3624413](https://doi.org/10.1109/TSP.2025.3624413)
 
 ## Requirements
 
-You need to install CPLEX and write the path to `cplexlp.m` in the file `setPara.m`.
-For example, if CPLEX is installed in the directory Applications on macOS, then edit the file as follows.
+You need to install CPLEX.
+This code has been tested with CPLEX version 22.1.2.
 
-```matlab
-cplexPath = '/Applications/CPLEX_Studio1210/cplex/matlab/x86-64_osx';
+## Notes on Previous Versions
+
+Previous version of this code used the MATLAB function `cplexlp.m`, which was included in CPLEX version 12.10.0.
+However, CPLEX version 20.1 or later no longer provides this function.
+Therefore, the current version provides a MEX file to interface with CPLEX.
+
+## Build (MEX)
+
+This code requires compiling the MEX file `cplexlp_mex.c`, which is located in `./eehtlib/mexfunc/`.
+
+The provided makefiles are `makefile.linux` and `makefile.mac` for Linux and macOS, respectively.
+These makefiles assume that CPLEX version 22.1.2 is installed and MATLAB R2024b is used.
+You may need to edit them depending on your environment.
+
+### macOS
+
+Move to the directory and run the following command in the terminal:
+
+```sh
+make -f makefile.mac all
+```
+
+### Linux
+
+Move to the directory and run the following command in the terminal:
+
+```sh
+make -f makefile.linux all
 ```
 
 ## Quick Start
 
-To run EEHT for a noisy separable matrix  $A = W H + N$ of size $d \times n$ with factorization rank $r$, type the command in the MATLAB command prompt.
+You can find the MATLAB script `runEeht.m` in the `./scripts/` directory.
+This script runs the EEHT methods (Algorithm 4) for a noisy separable matrix  $A = W H + N$ of size $d \times n$ with factorization rank $r$.
+
+Start MATLAB, navigate to the `./scripts/` directory, and run the following command:
 
 ```matlab
-run_eeht
+setup
 ```
+
+The `setup.m` script adds the required directory to the MATLAB path.
+Then, run the following command:
+
+```matlab
+runEeht
+```
+
+The input and output of the `runEeht.m` script are as follows.
 
 ### Input
 
-- ``d`` : Number of columns  
-- ``n`` : Number of rows
-- ``r`` : Factorization rank
-- ``delta`` : Noise intensity, i.e, delta = $||N||_1$
-- ``dataType`` : Choose 'normal' or 'ill-conditioned'
-- ``cVal`` : Parameter for generating $\alpha$ such that
-                     $\alpha^{(\text{r}-1)} = 10^{(-\text{cVal})}$
-- ``seed`` : Seed number for generating random numbers
+- `d` : Number of rows of $A$
+- `n` : Number of columns of $A$
+- `factorRank` : Factorization rank $r$ of $A$
+- `nu` : Noise intensity level, i.e, $\nu = \| N \|_1$
+- `seed` : Random seed
 
-The input matrices are the same as those of RHHP; see the [webpage](https://github.com/tomohiko-mizutani/RHHP) for the details.
+This input data corresponds to the normal-type matrix
+described in Section 6 of the paper: *Refinement of Hottopixx Method for Nonnegative Matrix Factorization Under Noisy Separability*, SIMAX, 2022. <https://doi.org/10.1137/21M1442206>.
 
 ### Output
 
-- Recovery rates by EEHT-A, -B, -C
+- Recovery rates, MRSA scores, and SAD scores for EEHT-A, EEHT-B, and EEHT-C
+- Elapsed time
 
-### Parameters
+The details of these metric values are provided in [Metric Values](#metric-values).
 
-The parameters $\lambda, \mu$ are used for constructing an initial index set $\mathcal{L}$; see Algorithm 3 of the paper.
-You can set the parameter values by editing the file 'setPara.m'.
-The default values are $(\lambda, \mu) = (3, 15)$.
-For example, when you choose $(\lambda, \mu) = (5, 50)$, open `setPara.m` and write it as follows.
+You can configure the EEHT parameters by setting the fields of the structure variable `opts`. See the next section for details.
+
+## Parameters in the EEHT Methods
+
+The EEHT parameters are specified through the structure variable `opts`.
+It contains the following fields:
+
+- `opts.displayFlag`: Set to `1` to enable output display, or `0` to disable it. The default value is `0`.
+- `opts.zeta`: This parameter is used in the step of constructing the initial set $\mathcal{L}$. The default value depends on the number of columns $n$ of the input matrix $A$: if $n \le 300$, it is set to `0`; if $300 < n \le 50000$, it is set to `10`; and if $n \ge 50000$, it is set to `50`.
+- `opts.eta`: This parameter is used in the step of constructing the initial set $\mathcal{L}$. The default value depends on the number of columns $n$ of the input matrix $A$: if $n \le 300$, it is set to `all`, which means that the parameter is set to the number of columns $n$; if $300 < n \le 50000$, it is set to `100`; and if $n \ge 50000$, it is set to `300`.
+- `opts.zeroTol`: Tolerance for zero detection. The default value is `1.0e-6`.
+- `opts.seedInitSet`: Random seed used to generate the set $\mathcal{L}_{\mathrm{EX}}$ in the step of constructing the initial set $\mathcal{L}$. The default value is `3887`.
+
+For example, if you want to set `opts.zeta = 3` and `opts.eta = 50` when running the MATLAB script `runEeht.m`,
+add the following lines to the script after `opts.displayFlag = 1;`:
 
 ```matlab
-lambda = 5;  
-mu = 50;
+opts.zeta = 3;
+opts.eta  = 50;
 ```
 
-Note that the parameters $\lambda, \mu$ should be chosen to satisfy $\lambda r + \mu \le n$ for the number $n$ of columns of $A$ and the factorization rank $r$.
+## Reproducing the Experiments
 
-## Experiments in Sections VI-B - Endmember Extraction Performance
+You can reproduce the experiments presented in the TSP paper using the MATLAB scripts in the `./scripts/` directory.
+Before running the scripts, move to the directory and run the following command:
 
-Section VI-B of the paper showed the experimental results on the endmember extraction performance of EEHT.
-The experiments for datasets 1 and 2 can be reproduced by using `expExtnPerf.m` and `dispRsltExtnPerf.m`
-where dataset 1 is constructed from Jasper Ridge HSI and dataset 2 from Samson HSI.
-The former code is for conducing experiments and the latter one is for plotting a graph for the results.
-To run the code, you need to set the input argument `datasetOpt` according to the table below.
+```matlab
+setup
+```
 
-| `datasetOpt` | Dataset for which you apply EEHT |
+### 1. Endmember Extraction Performance Experiments
+
+Section VI-B of the TSP paper presents endmember extraction performance experiments using datasets 1 and 2 (linear mixing models) and datasets 3 and 4 (bilinear mixing models). The experiments for datasets 1 and 2 can be reproduced using `runLmmExp.m`, and those for datasets 3 and 4 can be reproduced using `runBmmExp.m`.
+
+The output files generated by these scripts are saved in the `./results/` directory.
+You can plot the results using `runPlotLmmExpResults.m` for datasets 1 and 2, and `runPlotBmmExpResults.m` for datasets 3 and 4.
+
+#### Example Commands
+
+Run the experiments for datasets 1 and 2:
+
+```matlab
+runLmmExp
+```
+
+Plot the results for datasets 1 and 2:
+
+```
+runPlotLmmExpResults
+```
+
+### 2. Hyperspectral Unmixing Experiments
+
+Section VI-C studies the unmixing of the Urban HSI dataset, assuming that there are six endmembers in the image: Asphalt, Grass, Tree, Roof 1, Roof 2, and Soil. Below is an RGB image of Urban.
+
+<p align="center">
+<img src="./data/real_data/urban.png" width="30%">
+</p>
+
+You can reproduce the experiments using `runUrbanUnmixingExp.m`.
+The experiments use a preprocessing technique with parameters $\phi$ and $\omega$, as described in Section VI-C.
+To run the script, you need to set the input argument `preprocOpt` according to the table below.
+
+| `preprocOpt` | Parameters $(\phi,\omega)$ |
 | --- | --- |
-| 1 | Dataset 1|
-| 2 | Dataset 2|
+| 1   | $(0.4,0.1)$ |
+| 2   | $(0.45,0.15)$ |
+| 3   | $(0.5,0.3)$ |
+| 4   | $(0.55,0.45)$ |
+| 5   | $(0.6,0.6)$ |
 
-The following is the example for applying EEHT for dataset 1.
-In the experiments, you are recommend to set $(\lambda, \mu) = (10,100)$.
-To do so, edit  `setPara.m` as follows.
+The output files generated by the script are saved in the `./results/` directory.
+You can plot the results for `preprocOpt = 1` using `runPlotUrbanUnmixingExpResults.m`.
+If you want to plot the results for different values of `preprocOpt`, edit the script accordingly.
 
-```matlab
-lambda = 10;  
-mu = 100;
-```
+#### Example Commands
 
-Then, type the command for starting the experiments.
-
-```matlab
-expExtnPerf(1)
-```
-
-After the code has finished running, you get the output file `rsltExtnPerf_dataset1.mat`.
-You can display a graph for the results by using  `dispRsltExtnPerf.m`.
-Type the command
+Run the experiments:
 
 ```matlab
-dispRsltExtnPerf(1)
+runUrbanUnmixingExp
 ```
 
-and then a graph is displayed.
-The Result directory contains the output files `rsltExtnPerf_dataset1.mat` and `rsltExtnPerf_dataset2.mat`. Below is the graphs generated from them.
+Plot the results:
 
-<p align="center">
-<img src="./Result/rsltExtnPerf_dataset1.png" width="40%">
-&nbsp;　&nbsp; &nbsp; &nbsp; &nbsp;
-<img src="./Result/rsltExtnPerf_dataset2.png" width="40%">
-</p>
-
-## Experiments in Sections VI-C - Hyperspectral Unmixing of Urban HSI
-
-Section VI-C of the paper studied the unmixing of Urban HSI with assuming that there are six endmembers in the image: Asphalt, Grass, Tree, Roof 1, Roof 2 and Soil. Below is the RGB image of Urban.
-
-<p align="center">
-<img src="./Result/urban.png" width="40%">
-</p>
-
-You can run EEHT-C for unmixing Urban by using `expUnmixUrban.m` and `dispRsltUnmixUrban.m`.
-The former one is for unmixing Urban and the latter one is for plotting abundance maps.
-To enhance the unmixing performance,
-you are recommended to use a preprocessing technique with parameters $\phi$ and $\omega$ that is
-described in Section VI-C.
-To run `expUnmixUrban.m` and `dispRsltUnmixUrban.m`,
-it is necessary to set the input argument `preprocOpt` according to the table below.
-
-| `preprocOpt` | Parameters $\phi, \lambda$ |
-| --- | --- |
-| 1   | $(\phi,\omega) = (0.4,0.1)$ |
-| 2   | $(\phi,\omega) = (0.45,0.15)$ |
-| 3   | $(\phi,\omega) = (0.5,0.3)$ |
-| 4   | $(\phi,\omega) = (0.55,0.45)$ |
-| 5   | $(\phi,\omega) = (0.6,0.6)$ |
-
-The following is the example for applying EEHT-C for Urban with $(\phi, \omega)=(0.4, 0.1)$.
-You are recommend to set $(\lambda, \mu) = (50,300)$.
-To do so, edit  `setPara.m` as follows.
-
-```matlab
-lambda = 50;  
-mu = 300;
+```
+runPlotUrbanUnmixingExpResults
 ```
 
-Then, type the command for applying EEHT-C with preprocessing with $(\phi, \omega)=(0.4, 0.1)$ for Urban.
+### Remarks on the Accuracy Evaluation
 
-```matlab
-expUnmixUrban(1)
-```
+The experiments in the TSP paper use the reference endmember signatures identified in the [arXiv paper](https://arxiv.org/abs/1708.05125) to evaluate the accuracy of the endmember signatures estimated by EEHT. This code uses alternative reference signatures for the evaluation, which are generated using the procedure described in Section 5.3 of the [arXiv paper](https://arxiv.org/abs/2512.10506).
 
-After the code has finished running, you get the output file `rsltUnmixing_preproc1.mat`.
-You can display the abundance maps of Urban obtained by EEHT-C by using  `dispRsltUnmixUrban.m`.
-Type the command
+As a result, the reference endmember signatures used in the TSP paper and in this code do not exactly match. However, the differences are negligible: the MRSA values between the corresponding signatures are below $10^{-5}$.
 
-```matlab
-dispRsltUnmixUrban(1)
-```
+## Performance Dependencies
 
-and then abundance maps are displayed.
-The Result directory contains the output files
-`rsltUnmixing_preproc1.mat`, ..., `rsltUnmixing_preproc5.mat` obtained by performing `expUnmixUrban.m` with `preprocOpt` = 1 to 5.
-Below is the abundance maps generated from ``rsltUnmixing_preproc1.mat``.
+If the Hottopixx model has multiple optimal solutions, the endmember signatures estimated by EEHT may depend on the choice of LP solver and the CPLEX version.
 
-<p align="center">
-<img src="./Result/rsltUnmixUrban_preproc1.png" width="70%">
-</p>
+The experiments presented in the TSP paper were conducted using the MATLAB function `cplexlp.m`, which was included in CPLEX version 12.10.0. When the current version of this code is run with CPLEX version 22.1.2 via a MEX file for the endmember extraction performance experiments, the results did not exactly match those obtained with the previous version of the code.
+
+## Metric Values
+
+Let $\mathcal{K}$ be the reference set of column indices, and let $\hat{\mathcal{K}}$ be the estimated set. The recovery rate is defined as
+$$
+\frac{|\mathcal{K} \cap \hat{\mathcal{K}}|}{|\mathcal{K}|} \in [0, 1].
+$$
+Let $\bm{a}, \bm{b} \in \mathbb{R}^d$ be spectral signatures.
+The MRSA (mean-removed spectral angle) value between them is defined as
+$$
+\mathrm{MRSA}(\bm{a}, \bm{b}) = \frac{100}{\pi} \arccos
+\frac{(\bm{a} - \mathrm{ave}(\bm{a}))^\top (\bm{b} - \mathrm{ave}(\bm{b}))}
+{\| \bm{a} - \mathrm{ave}(\bm{a}) \|_2 \, \| \bm{b} - \mathrm{ave}(\bm{b}) \|_2}
+\in [0, 100].
+$$
+Here, $\mathrm{ave}(\bm{c})$ for $\bm{c} \in \mathbb{R}^d$ denotes
+$(\bm{1}^\top \bm{c} / d)\cdot \bm{1}$.
+
+The SAD (spectral angle distance) value is defined as
+$$
+\mathrm{SAD}(\bm{a}, \bm{b}) = \frac{100}{\pi} \arccos
+\frac{\bm{a}^\top \bm{b}}{\| \bm{a} \|_2 \, \| \bm{b} \|_2}
+\in [0, 100].
+$$
+
+Let $\bm{w}_1, \ldots, \bm{w}_r$ be the reference endmember signatures, and let
+$\hat{\bm{w}}_1, \ldots, \hat{\bm{w}}_r$ be their estimates.
+The MRSA score is defined as the mean of the MRSA values:
+$$
+\frac{1}{r}\sum_{i=1}^{r} \mathrm{MRSA}(\bm{w}_i, \hat{\bm{w}}_i),
+$$
+and the SAD score is defined as the mean of the SAD values:
+$$
+\frac{1}{r}\sum_{i=1}^{r} \mathrm{SAD}(\bm{w}_i, \hat{\bm{w}}_i).
+$$
+
 
 ---
 Contact: Tomohiko Mizutani [(mizutani.t@shizuoka.ac.jp)](mailto:mizutani.t@shizuoka.ac.jp)

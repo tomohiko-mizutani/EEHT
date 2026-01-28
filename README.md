@@ -65,7 +65,7 @@ The input and output of the `runEeht.m` script are as follows.
 - `d` : Number of rows of $A$
 - `n` : Number of columns of $A$
 - `factorRank` : Factorization rank $r$ of $A$
-- `nu` : Noise intensity level, i.e, $\nu = \| N \|_1$
+- `nu` : Noise intensity level, i.e, $\nu = \lVert N \rVert_1$
 - `seed` : Random seed
 
 This input data corresponds to the normal-type matrix
@@ -76,8 +76,6 @@ described in Section 6 of the paper: *Refinement of Hottopixx Method for Nonnega
 - Recovery rates, MRSA scores, and SAD scores for EEHT-A, EEHT-B, and EEHT-C
 - Elapsed time
 
-The details of these metric values are provided in [Metric Values](#metric-values).
-
 You can configure the EEHT parameters by setting the fields of the structure variable `opts`. See the next section for details.
 
 ## Parameters in the EEHT Methods
@@ -87,7 +85,7 @@ It contains the following fields:
 
 - `opts.displayFlag`: Set to `1` to enable output display, or `0` to disable it. The default value is `0`.
 - `opts.zeta`: This parameter is used in the step of constructing the initial set $\mathcal{L}$. The default value depends on the number of columns $n$ of the input matrix $A$: if $n \le 300$, it is set to `0`; if $300 < n \le 50000$, it is set to `10`; and if $n \ge 50000$, it is set to `50`.
-- `opts.eta`: This parameter is used in the step of constructing the initial set $\mathcal{L}$. The default value depends on the number of columns $n$ of the input matrix $A$: if $n \le 300$, it is set to `all`, which means that the parameter is set to the number of columns $n$; if $300 < n \le 50000$, it is set to `100`; and if $n \ge 50000$, it is set to `300`.
+- `opts.eta`: This parameter is used in the step of constructing the initial set $\mathcal{L}$. The default value depends on the number of columns $n$ of the input matrix $A$: if $n \le 300$, it is set to `'all'`, which means that the parameter is set to the number of columns $n$; if $300 < n \le 50000$, it is set to `100`; and if $n \ge 50000$, it is set to `300`.
 - `opts.zeroTol`: Tolerance for zero detection. The default value is `1.0e-6`.
 - `opts.seedInitSet`: Random seed used to generate the set $\mathcal{L}_{\mathrm{EX}}$ in the step of constructing the initial set $\mathcal{L}$. The default value is `3887`.
 
@@ -134,7 +132,7 @@ runPlotLmmExpResults
 Section VI-C studies the unmixing of the Urban HSI dataset, assuming that there are six endmembers in the image: Asphalt, Grass, Tree, Roof 1, Roof 2, and Soil. Below is an RGB image of Urban.
 
 <p align="center">
-<img src="./data/real_data/urban.png" width="30%">
+<img src="./data/real_data/urban.png" width="50%">
 </p>
 
 You can reproduce the experiments using `runUrbanUnmixingExp.m`.
@@ -178,42 +176,6 @@ As a result, the reference endmember signatures used in the TSP paper and in thi
 If the Hottopixx model has multiple optimal solutions, the endmember signatures estimated by EEHT may depend on the choice of LP solver and the CPLEX version.
 
 The experiments presented in the TSP paper were conducted using the MATLAB function `cplexlp.m`, which was included in CPLEX version 12.10.0. When the current version of this code is run with CPLEX version 22.1.2 via a MEX file for the endmember extraction performance experiments, the results did not exactly match those obtained with the previous version of the code.
-
-## Metric Values
-
-Let $\mathcal{K}$ be the reference set of column indices, and let $\hat{\mathcal{K}}$ be the estimated set. The recovery rate is defined as
-$$
-\frac{|\mathcal{K} \cap \hat{\mathcal{K}}|}{|\mathcal{K}|} \in [0, 1].
-$$
-Let $\bm{a}, \bm{b} \in \mathbb{R}^d$ be spectral signatures.
-The MRSA (mean-removed spectral angle) value between them is defined as
-$$
-\mathrm{MRSA}(\bm{a}, \bm{b}) = \frac{100}{\pi} \arccos
-\frac{(\bm{a} - \mathrm{ave}(\bm{a}))^\top (\bm{b} - \mathrm{ave}(\bm{b}))}
-{\| \bm{a} - \mathrm{ave}(\bm{a}) \|_2 \, \| \bm{b} - \mathrm{ave}(\bm{b}) \|_2}
-\in [0, 100].
-$$
-Here, $\mathrm{ave}(\bm{c})$ for $\bm{c} \in \mathbb{R}^d$ denotes
-$(\bm{1}^\top \bm{c} / d)\cdot \bm{1}$.
-
-The SAD (spectral angle distance) value is defined as
-$$
-\mathrm{SAD}(\bm{a}, \bm{b}) = \frac{100}{\pi} \arccos
-\frac{\bm{a}^\top \bm{b}}{\| \bm{a} \|_2 \, \| \bm{b} \|_2}
-\in [0, 100].
-$$
-
-Let $\bm{w}_1, \ldots, \bm{w}_r$ be the reference endmember signatures, and let
-$\hat{\bm{w}}_1, \ldots, \hat{\bm{w}}_r$ be their estimates.
-The MRSA score is defined as the mean of the MRSA values:
-$$
-\frac{1}{r}\sum_{i=1}^{r} \mathrm{MRSA}(\bm{w}_i, \hat{\bm{w}}_i),
-$$
-and the SAD score is defined as the mean of the SAD values:
-$$
-\frac{1}{r}\sum_{i=1}^{r} \mathrm{SAD}(\bm{w}_i, \hat{\bm{w}}_i).
-$$
-
 
 ---
 Contact: Tomohiko Mizutani [(mizutani.t@shizuoka.ac.jp)](mailto:mizutani.t@shizuoka.ac.jp)

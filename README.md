@@ -2,7 +2,7 @@
 
 This repository contains MATLAB code for the EEHT methods, introduced in the following paper:
 
-*Endmember Extraction From Hyperspectral Images Using Self-Dictionary Approach With Linear Programming*, TSP, 2025.
+Endmember Extraction From Hyperspectral Images Using Self-Dictionary Approach With Linear Programming, TSP, 2025.
  [https://doi.org/10.1109/TSP.2025.3624413](https://doi.org/10.1109/TSP.2025.3624413)
 
 ## Requirements
@@ -69,7 +69,7 @@ The input and output of the `runEeht.m` script are as follows.
 - `seed` : Random seed
 
 This input data corresponds to the normal-type matrix
-described in Section 6 of the paper: *Refinement of Hottopixx Method for Nonnegative Matrix Factorization Under Noisy Separability*, SIMAX, 2022. <https://doi.org/10.1137/21M1442206>.
+described in Section 6 of the paper: Refinement of Hottopixx Method for Nonnegative Matrix Factorization Under Noisy Separability, SIMAX, 2022. <https://doi.org/10.1137/21M1442206>.
 
 ### Output
 
@@ -90,7 +90,7 @@ It contains the following fields:
 - `opts.seedInitSet`: Random seed used to generate the set $\mathcal{L}_{\mathrm{EX}}$ in the step of constructing the initial set $\mathcal{L}$. The default value is `3887`.
 
 For example, if you want to set `opts.zeta = 3` and `opts.eta = 50` when running the MATLAB script `runEeht.m`,
-add the following lines to the script after `opts.displayFlag = 1;`:
+add the following lines to the script after `opts.displayFlag = 0;`:
 
 ```matlab
 opts.zeta = 3;

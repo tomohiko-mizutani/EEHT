@@ -6,7 +6,7 @@ factorRank = 10;
 nu = 0.1;
 seed = 276;
 
-opts.displayFlag = 1; 
+opts.displayFlag = 0; 
 
 [A, gtIndices] = genNormalData(d, n, factorRank, nu, seed);
 
